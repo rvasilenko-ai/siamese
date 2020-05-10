@@ -64,9 +64,9 @@ class SiameseNetwork:
         batch_size = kwargs.pop('batch_size')
 
         train_generator = self.__pair_generator(x_train, y_train, batch_size)
-        train_steps = max(len(x_train) / batch_size, 1)
+        train_steps = max(len(x_train) // batch_size, 1)
         test_generator = self.__pair_generator(x_test, y_test, batch_size)
-        test_steps = max(len(x_test) / batch_size, 1)
+        test_steps = max(len(x_test) // batch_size, 1)
         self.siamese_model.fit_generator(train_generator,
                                          steps_per_epoch=train_steps,
                                          validation_data=test_generator,
@@ -83,9 +83,9 @@ class SiameseNetwork:
         :param batch_size: Number of pairs to generate per batch.
         """
         train_generator = self.__pair_generator(x_train, y_train, batch_size)
-        train_steps = max(len(x_train) / batch_size, 1)
+        train_steps = max(len(x_train) // batch_size, 1)
         test_generator = self.__pair_generator(x_test, y_test, batch_size)
-        test_steps = max(len(x_test) / batch_size, 1)
+        test_steps = max(len(x_test) // batch_size, 1)
         self.siamese_model.fit_generator(train_generator,
                                          steps_per_epoch=train_steps,
                                          validation_data=test_generator,
@@ -114,7 +114,7 @@ class SiameseNetwork:
         batch_size = kwargs.pop('batch_size')
 
         generator = self.__pair_generator(x, y, batch_size)
-        steps = len(x) / batch_size
+        steps = len(x) // batch_size
         return self.siamese_model.evaluate_generator(generator, steps=steps, **kwargs)
 
     def evaluate_generator(self, x, y, batch_size, *args, **kwargs):
@@ -128,7 +128,7 @@ class SiameseNetwork:
         :return: A tuple of scores
         """
         generator = self.__pair_generator(x, y, batch_size=batch_size)
-        steps = len(x) / batch_size
+        steps = len(x) // batch_size
         return self.siamese_model.evaluate_generator(generator, steps=steps, *args, **kwargs)
 
     def __initialize_siamese_model(self):
@@ -158,7 +158,7 @@ class SiameseNetwork:
         :param num_classes: number of classes in the supplied input data
         :return: A tuple of (Numpy array of pairs, Numpy array of labels)
         """
-        num_pairs = batch_size / 2
+        num_pairs = batch_size // 2
         positive_pairs, positive_labels = self.__create_positive_pairs(x, class_indices, num_pairs, num_classes)
         negative_pairs, negative_labels = self.__create_negative_pairs(x, class_indices, num_pairs, num_classes)
         return np.array(positive_pairs + negative_pairs), np.array(positive_labels + negative_labels)
